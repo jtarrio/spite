@@ -8,6 +8,9 @@ as I don't have experience writing demos, I won't have time to finish it.
 Therefore, here is the second best thing: I release what I have so far, you
 enjoy it and, hopefully, you'll feel inspired to continue work on it.
 
+* [See it in action](https://jacobo.tarrio.org/assets/2022/spite/index.html).
+* [See the blog post](https://jacobo.tarrio.org/2022/project-spite.html).
+
 ## How to build
 
 You'll need NPM and a Linux environment to build Project Spite. MacOS might
