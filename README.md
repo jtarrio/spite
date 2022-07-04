@@ -48,5 +48,5 @@ All the code was written by me.
 Regards to Fabien Sanglard for his
 [review of the Second Reality source code](https://fabiensanglard.net/second_reality/)
 and to Brett Paterson (FireLight) for his
-[MOD and S3M player tutorials](lib/docs).
+[MOD and S3M player tutorials](lib/s3mplayer/docs).
 
