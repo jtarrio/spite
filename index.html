@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    @font-face {
+      font-family: 'srserif';
+      font-display: swap;
+      src: url(./assets/SRserif.woff2) format('woff2');
+    }
+
+    body {
+      background: black;
+      color: white;
+      margin: 0;
+      font-family: sans-serif;
+      font-size: 16pt;
+    }
+
+    a {
+      color: #7f7fff;
+    }
+
+    a.visited {
+      color: #df7fff;
+    }
+
+    input {
+      font-size: 20pt;
+    }
+
+    canvas {
+      position: absolute;
+      font-family: srserif;
+      font-variant-ligatures: discretionary-ligatures;
+      cursor: none;
+    }
+
+    #loading {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      font: 16pt srserif;
+      background: black;
+      color: white;
+      z-index: 10;
+      overflow: hidden;
+    }
+
+    #t {
+      position: relative;
+      animation: h 6s infinite linear, v 3.375s infinite linear;
+    }
+
+    @keyframes h {
+
+      0%,
+      100% {
+        left: 0
+      }
+
+      50% {
+        left: calc(100% - 5em)
+      }
+    }
+
+    @keyframes v {
+
+      0%,
+      100% {
+        top: calc((100% - 1em) * 0.1)
+      }
+
+      45% {
+        top: calc(100% - 1em)
+      }
+
+      95% {
+        top: 0
+      }
+    }
+  </style>
+  <script type="module" src="./main.js" defer></script>
+</head>
+
+<body>
+  <div id="loading">
+    <span id="t">Loading...</span>
+  </div>
+  <div style="margin:auto;max-width:60em;">
+    <p style="text-align:center;font-family:srserif">Ah, so <i>you</i> think
+      you&rsquo;re going to be able to code <i>that</i>...<br>
+      <span style="margin-left:15em">&mdash; my little brother (1994)</span>
+    </p>
+    <p>On July 30, 1993, Future Crew debuted
+      <a href="https://en.wikipedia.org/wiki/Second_Reality">Second Reality</a>
+      at Assembly 93. In April 2022 I realized that the 30<sup>th</sup>
+      anniversary was coming up, so I thought that someone should make an
+      HTML5 remake.
+    </p>
+    <p>I started one, but I don't have any experience coding demos so I will
+      probably be unable to finish it in time. Therefore, I'm releasing what I
+      got after one month of work in the hopes that someone else can take the
+      idea and run with it.
+    </p>
+    <input id="startButton" type="button" value="Start the demo">
+    <ul>
+      <li>Based on Second Reality by Future Crew: Marvel, Pixel, Purple Motion,
+        Skaven, Psi, Trug, Wildfire, Abyss, Gore.</li>
+      <li>Code by <a href="https://jacobo.tarrio.org/">me</a>.</li>
+      <li>The music is the original S3M, played in real time.</li>
+      <li>The planet landscape was redrawn based on the original pixel art.</li>
+      <li>The ship models were extracted from the original demo.</li>
+      <li>Uses <a href="https://threejs.org/">three.js</a> for the 3D scenes.</li>
+      <li>The font is "SR serif", based on <a href="https://github.com/SorkinType/Merriweather/">Merriweather</a>.</li>
+    </ul>
+  </div>
+</body>
+
+</html>

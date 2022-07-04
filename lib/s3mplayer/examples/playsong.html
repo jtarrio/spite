@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+</head>
+
+<body>
+  <script type="module">
+    import { ParseS3M } from '../s3m.js';
+    import { Player } from '../player.js';
+
+    let the_song;
+
+    fetch("../../../assets/2nd_sk.s3m")
+    // fetch("../../../assets/2nd_pm.s3m")
+    // fetch("./tones.s3m")
+      .then(response => response.arrayBuffer())
+      .then(s3m => ParseS3M(new Uint8Array(s3m)))
+      .then(song => { the_song = new Player(song); });
+
+    document.getElementById("playbtn").onclick = () => the_song.play();
+  </script>
+
+  <input id="playbtn" type="button" value="Play">
+</body>
+
+</html>

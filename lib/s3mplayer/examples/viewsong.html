@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+</head>
+
+<body>
+  <script type="module">
+    import { ParseS3M } from '../s3m.js';
+    import { Channel, Instrument, Pattern, Song } from '../song.js';
+
+    // fetch("../../../assets/2nd_sk.s3m")
+    fetch("../../../assets/2nd_pm.s3m")
+      .then(response => response.arrayBuffer())
+      .then(s3m => ParseS3M(new Uint8Array(s3m)))
+      .then(song => ViewSong(song));
+
+    /**
+     * @param {Song} song
+     */
+    function ViewSong(song) {
+      let text = ["Song: " + song.name];
+      text.push("Volume: " + song.volume);
+      text.push("Speed/Tempo: " + song.speed + "/" + song.tempo);
+      text.push("");
+      text.push("Channels: " + ViewChannels(song.channels));
+      text.push("");
+      text.push("Instruments:");
+      text.push(ViewInstruments(song.instruments));
+      text.push("");
+      text.push("Orders: " + song.orders.join(", "));
+      text.push("");
+      text.push("Patterns:");
+      text.push(ViewPatterns(song.patterns, song.channels.size));
+      
+      let pre = document.createElement('pre');
+      document.body.appendChild(pre);
+      pre.innerText = text.join("\n");
+    }
+
+    /**
+     * @param {Map<number, Channel>} channels
+     */
+    function ViewChannels(channels) {
+      let chn = [];
+      for (let [num, channel] of channels) {
+        chn.push(num + ":" + channel.name + "(" + channel.pan + ")");
+      }
+      return chn.join(", ");
+    }
+
+    /**
+     * @param {Instrument[]} instruments
+     */
+    function ViewInstruments(instruments) {
+      let ins = [];
+      for (let i = 0; i < instruments.length; ++i) {
+        let inst = instruments[i];
+        ins.push("   " + i + ":");
+        ins.push("       Name: " + inst.name);
+        ins.push("       Volume: " + inst.volume);
+        if (inst.looped) {
+          ins.push("       Loop begin: " + inst.loop_begin + " end: " + inst.loop_end);
+        }
+        ins.push("       C4 frequency: "+ inst.middle_c_freq);
+        ins.push("       Length: " + inst.sample.length);
+      }
+      return ins.join("\n");
+    }
+
+const note_names = ["C-", "C#", "D-", "D#", "E-", "F-", "F#", "G-", "G#", "A-", "A#", "B-"];
+
+    /**
+     * @param {Pattern[]} patterns
+     */
+    function ViewPatterns(patterns, num_channels) {
+      let used_effects = new Set();
+      let pats = [];
+      for (let p = 0; p < patterns.length; ++p) {
+        pats.push("   " + p + ":");
+        let rows = patterns[p].rows;
+        for (let r = 0; r < rows.length; ++r) {
+          let row = rows[r];
+          let channels = "    ... .. .. ...".repeat(num_channels);
+          for (let c = 0; c < row.commands.length; ++c) {
+            let cmd = row.commands[c];
+            let chn = cmd.channel;
+            let off = 17 * chn + 4;
+            if (cmd.note != null) {
+              let note = cmd.note != 254 ? note_names[cmd.note % 12] + Math.floor(cmd.note / 12) : "^^.";
+              channels = channels.substr(0, off) + note + channels.substr(off + 3);
+            }
+            if (cmd.instrument != null) {
+              channels = channels.substr(0, off + 4) + Math.floor(cmd.instrument / 10) + (cmd.instrument % 10) + channels.substr(off + 6);
+            }
+            if (cmd.volume != null) {
+              let v = Math.floor(cmd.volume * 64);
+              channels = channels.substr(0, off + 7) + Math.floor(v / 10) + (v % 10) + channels.substr(off + 9);
+            }
+            if (cmd.effect != null) {
+              let effect = String.fromCharCode(64 + cmd.effect);
+              used_effects.add(effect);
+              let info = cmd.info.toString(16).toUpperCase();
+              if (info.length == 1) info = "0" + info;
+              channels = channels.substr(0, off + 10) + effect + info + channels.substr(off + 13);
+            }
+          }
+          pats.push(channels);
+        }
+        pats.push("");
+      }
+      pats.push("Effects used in this song: " + [...used_effects].sort().join(", "));
+      return pats.join("\n");
+    }
+  </script>
+</body>
+
+</html>
